@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: esclient
+server:
+  port: 8080
+
+esclient:
+  elasticsearch:
+    hostlist: 192.168.99.100:9200
