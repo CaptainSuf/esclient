@@ -1,7 +1,6 @@
 package com.dev;
 
 import org.apache.http.HttpHost;
-import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -31,8 +30,7 @@ public class EsClient {
             map.put("job","整合骑士");
             request.source(map);
             IndexResponse response = client.index(request, RequestOptions.DEFAULT);
-            DocWriteResponse.Result result = response.getResult();
-            System.out.println(result);
+            System.out.println(response.status());
         } catch (IOException e) {
             e.printStackTrace();
         }
