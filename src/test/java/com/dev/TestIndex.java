@@ -2,6 +2,8 @@ package com.dev;
 
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -116,5 +118,33 @@ public class TestIndex {
         GetResponse response = client.get(request,RequestOptions.DEFAULT);
         Map<String,Object> map = response.getSource();
         System.out.println(map);
+    }
+
+    @Test
+    public void testBulk()throws Exception{
+        // 构建bulk请求对象
+        BulkRequest request = new BulkRequest();
+        // 构建新增请求对象&组装文档数据
+        IndexRequest indexRequest = new IndexRequest("test_add_index");
+        Map<String,Object> addMap = new HashMap<>();
+        addMap.put("name","小弟01");
+        addMap.put("age",50);
+        addMap.put("job","小弟");
+        addMap.put("desc","干辛苦活的 拿钱少的");
+        indexRequest.source(addMap);
+        // 构建更新请求对象&组装文档数据
+        UpdateRequest updateRequest = new UpdateRequest("test_add_index","0Xvjam8B-0JvHIwTV_VN");
+        Map<String,Object> updateMap = new HashMap<>();
+        updateMap.put("name","dalao");
+        updateMap.put("age",52);
+        updateMap.put("job","mgr");
+        updateMap.put("desc","干辛苦活的");
+        updateRequest.doc(updateMap);
+        // 组装到bulk对象中
+        request.add(indexRequest);
+        request.add(updateRequest);
+        // 请求服务器
+        BulkResponse responses = client.bulk(request,RequestOptions.DEFAULT);
+        System.out.println(responses.status());
     }
 }
